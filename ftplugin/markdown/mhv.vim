@@ -49,6 +49,8 @@ function! s:InsertEmphasisNormal(type) "{{{
 	" Choose bold for emphasis else default is itlics
 	if a:type == 1
 		let l:emphasis_marks = "__"
+	elseif a:type == 3
+		let l:emphasis_marks = "`"
 	endif
 
 	" If space go forward and put emphasis on next word
@@ -68,6 +70,8 @@ function! s:InsertEmphasisVisual(type) "{{{
 	" Choose bold for emphasis else default is itlics
 	if a:type == 1
 		let l:emphasis_marks = "__"
+	elseif a:type == 3
+		let l:emphasis_marks = "`"
 	endif
 	"
 	" End visual mode
@@ -192,7 +196,7 @@ nnoremap <buffer> <localleader>h5 :call <SID>InsertHeader(5)<CR>
 nnoremap <buffer> <localleader>h6 :call <SID>InsertHeader(6)<CR> 
 "}}}
 
-" Emphasis Mapping {{{
+" Emphasis Mapping ( 1:Bold | 2:Italics ) {{{
 nnoremap <buffer> <localleader>b :call <SID>InsertEmphasisNormal(1)<CR>
 nnoremap <buffer> <localleader>i :call <SID>InsertEmphasisNormal(2)<CR>
 vnoremap <buffer> <localleader>b :<c-u>call <SID>InsertEmphasisVisual(1)<CR>
@@ -205,3 +209,8 @@ vnoremap <buffer> <localleader>ul :<c-u>call <SID>InsertUnorderedListVisual()<CR
 nnoremap <buffer> <localleader>ol :call <SID>InsertOrderedListNormal()<CR>
 vnoremap <buffer> <localleader>ol :<c-u>call <SID>InsertOrderedListVisual()<CR>
 " }}}
+
+" BackQuotes Mapping ( Using Emphasis Mapping 3:BackQuote ) {{{
+nnoremap <buffer> <localleader>bt :call <SID>InsertEmphasisNormal(3)<CR>
+vnoremap <buffer> <localleader>bt :<c-u>call <SID>InsertEmphasisVisual(3)<CR>
+"}}}
