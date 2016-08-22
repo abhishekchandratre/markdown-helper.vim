@@ -8,7 +8,7 @@ endif
 let g:loaded_mhv = 1
 
 
-function! s:InsertHeader(header_tag)
+function! s:InsertHeader(header_tag) "{{{
 	let l:save_cursor = getcurpos()
 	let l:current_line = getline('.')
 	let l:cur_line_length = strlen(l:current_line)
@@ -39,9 +39,9 @@ function! s:InsertHeader(header_tag)
 	if a:header_tag < 2
 		normal! j
 	endif
-endfunction
+endfunction "}}}
 
-function! s:InsertEmphasisNormal(type)
+function! s:InsertEmphasisNormal(type) "{{{
 	" get word under cursor to check for space
 	let l:current_char = matchstr(getline('.'), '\%' . col('.') . 'c.')
 	let l:emphasis_marks = "*"
@@ -57,9 +57,9 @@ function! s:InsertEmphasisNormal(type)
 	else
 		execute "normal! viw\<esc>`<i".l:emphasis_marks."\<esc>lea".l:emphasis_marks
 	endif
-endfunction
+endfunction "}}}
 
-function! s:InsertEmphasisVisual(type)
+function! s:InsertEmphasisVisual(type) "{{{
 	echom "In Emphasis visual"
 	let l:lastSelectionStart = getpos("'<")
 	let l:lastSelectionEnd = getpos("'>")
@@ -114,17 +114,22 @@ function! s:InsertEmphasisVisual(type)
 	call setpos("'<", l:lastSelectionStart)
 	call setpos("'>", l:lastSelectionEnd)
 
-endfunction
+endfunction "}}}
 
-"----------------------------MAPPINGS-------------------------------
+"----------------------------MAPPINGS-------------------------------"
+
+" Header Mapping {{{
 nnoremap <buffer> <localleader>h1 :call <SID>InsertHeader(1)<CR>
 nnoremap <buffer> <localleader>h2 :call <SID>InsertHeader(2)<CR>
 nnoremap <buffer> <localleader>h3 :call <SID>InsertHeader(3)<CR>
 nnoremap <buffer> <localleader>h4 :call <SID>InsertHeader(4)<CR>
 nnoremap <buffer> <localleader>h5 :call <SID>InsertHeader(5)<CR>
-nnoremap <buffer> <localleader>h6 :call <SID>InsertHeader(6)<CR>
+nnoremap <buffer> <localleader>h6 :call <SID>InsertHeader(6)<CR> 
+"}}}
 
+" Emphasis Mapping {{{
 nnoremap <buffer> <localleader>b :call <SID>InsertEmphasisNormal(1)<CR>
 nnoremap <buffer> <localleader>i :call <SID>InsertEmphasisNormal(2)<CR>
 vnoremap <buffer> <localleader>b :<c-u>call <SID>InsertEmphasisVisual(1)<CR>
 vnoremap <buffer> <localleader>i :<c-u>call <SID>InsertEmphasisVisual(2)<CR>
+"}}}
