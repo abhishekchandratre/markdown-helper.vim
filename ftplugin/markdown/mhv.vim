@@ -185,6 +185,38 @@ function! s:InsertOrderedListVisual() "{{{
 	normal `<
 endfunction "}}}
 
+function! s:InsertBlockQuoteNormal() "{{{
+	let l:listmark = ">"
+	execute "normal! ^i".l:listmark."\<space>"
+endfunction
+"}}}
+
+function! s:InsertBlockQuoteVisual() "{{{ 
+	let l:listmark = ">"
+
+	" Exit Visual Mode
+	execute "normal! \<esc>"
+	
+	" Get range for traversal
+	normal! `<
+	let l:left_marker_line = line('.')
+	normal! `>
+	let l:right_marker_line = line('.')
+
+	" Traverse from left visual marker to right visual marker
+	normal! `<
+	while ( 1 )
+		let l:left_marker_line = line('.')
+		execute "normal! ^i".l:listmark."\<space>\<esc>j"
+		if ( l:left_marker_line == l:right_marker_line )
+			break
+		endif
+	endwhile
+
+	" Place cursor to original position
+	normal `<
+endfunction "}}}
+
 "----------------------------MAPPINGS-------------------------------"
 
 " Header Mapping {{{
@@ -213,4 +245,9 @@ vnoremap <buffer> <localleader>ol :<c-u>call <SID>InsertOrderedListVisual()<CR>
 " BackQuotes Mapping ( Using Emphasis Mapping 3:BackQuote ) {{{
 nnoremap <buffer> <localleader>bt :call <SID>InsertEmphasisNormal(3)<CR>
 vnoremap <buffer> <localleader>bt :<c-u>call <SID>InsertEmphasisVisual(3)<CR>
+"}}}
+
+" BlockkQuotes Mapping {{{
+nnoremap <buffer> <localleader>bq :call <SID>InsertBlockQuoteNormal()<CR>
+vnoremap <buffer> <localleader>bq :<c-u>call <SID>InsertBlockQuoteVisual()<CR>
 "}}}
