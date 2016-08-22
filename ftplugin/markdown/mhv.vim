@@ -116,6 +116,71 @@ function! s:InsertEmphasisVisual(type) "{{{
 
 endfunction "}}}
 
+function! s:InsertUnorderedListNormal() "{{{
+	let l:listmark = "-"
+	execute "normal! ^i".l:listmark."\<space>"
+endfunction
+"}}}
+
+function! s:InsertUnorderedListVisual() "{{{ 
+	let l:listmark = "-"
+
+	" Exit Visual Mode
+	execute "normal! \<esc>"
+	
+	" Get range for traversal
+	normal! `<
+	let l:left_marker_line = line('.')
+	normal! `>
+	let l:right_marker_line = line('.')
+
+	" Traverse from left visual marker to right visual marker
+	normal! `<
+	while ( 1 )
+		let l:left_marker_line = line('.')
+		execute "normal! ^i".l:listmark."\<space>\<esc>j"
+		if ( l:left_marker_line == l:right_marker_line )
+			break
+		endif
+	endwhile
+
+	" Place cursor to original position
+	normal `<
+endfunction "}}}
+
+function! s:InsertOrderedListNormal() "{{{
+	let l:list_number = 1
+	execute "normal! ^i".l:list_number.".\<space>"
+endfunction
+"}}}
+
+function! s:InsertOrderedListVisual() "{{{ 
+	let l:list_number = 1
+
+	" Exit Visual Mode
+	execute "normal! \<esc>"
+	
+	" Get range for traversal
+	normal! `<
+	let l:left_marker_line = line('.')
+	normal! `>
+	let l:right_marker_line = line('.')
+
+	" Traverse from left visual marker to right visual marker
+	normal! `<
+	while ( 1 )
+		let l:left_marker_line = line('.')
+		execute "normal! ^i".l:list_number.".\<space>\<esc>j"
+		let list_number = l:list_number + 1
+		if ( l:left_marker_line == l:right_marker_line )
+			break
+		endif
+	endwhile
+
+	" Place cursor to original position
+	normal `<
+endfunction "}}}
+
 "----------------------------MAPPINGS-------------------------------"
 
 " Header Mapping {{{
@@ -133,3 +198,10 @@ nnoremap <buffer> <localleader>i :call <SID>InsertEmphasisNormal(2)<CR>
 vnoremap <buffer> <localleader>b :<c-u>call <SID>InsertEmphasisVisual(1)<CR>
 vnoremap <buffer> <localleader>i :<c-u>call <SID>InsertEmphasisVisual(2)<CR>
 "}}}
+
+" List Mapping {{{
+nnoremap <buffer> <localleader>ul :call <SID>InsertUnorderedListNormal()<CR>
+vnoremap <buffer> <localleader>ul :<c-u>call <SID>InsertUnorderedListVisual()<CR>
+nnoremap <buffer> <localleader>ol :call <SID>InsertOrderedListNormal()<CR>
+vnoremap <buffer> <localleader>ol :<c-u>call <SID>InsertOrderedListVisual()<CR>
+" }}}
