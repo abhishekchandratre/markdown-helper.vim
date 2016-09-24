@@ -7,6 +7,8 @@ if exists("g:loaded_mhv")
 endif
 let g:loaded_mhv = 1
 
+autocmd Filetype Markdown setlocal expandtab tabstop=4 shiftwidth=4
+
 
 function! s:InsertHeader(header_tag) "{{{
 	let l:save_cursor = getcurpos()
