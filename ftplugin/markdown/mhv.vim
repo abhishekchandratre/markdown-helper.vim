@@ -219,6 +219,38 @@ function! s:InsertBlockQuoteVisual() "{{{
 	normal `<
 endfunction "}}}
 
+function! s:InsertNewlineNormal() "{{{
+	execute "normal! $a"."\<space>\<space>"
+endfunction
+"}}}
+
+function! s:InsertNewlineVisual() "{{{ 
+	let l:listmark = ">"
+
+	" Exit Visual Mode
+	execute "normal! \<esc>"
+	
+	" Get range for traversal
+	normal! `<
+	let l:left_marker_line = line('.')
+	normal! `>
+	let l:right_marker_line = line('.')
+
+	" Traverse from left visual marker to right visual marker
+	normal! `<
+	while ( 1 )
+		let l:left_marker_line = line('.')
+		execute "normal! $a"."\<space>\<space>\<esc>j"
+		if ( l:left_marker_line == l:right_marker_line )
+			break
+		endif
+	endwhile
+
+	" Place cursor to original position
+	normal `<
+endfunction "}}}
+
+
 "----------------------------MAPPINGS-------------------------------"
 
 " Header Mapping {{{
@@ -252,4 +284,9 @@ vnoremap <buffer> <localleader>bt :<c-u>call <SID>InsertEmphasisVisual(3)<CR>
 " BlockkQuotes Mapping {{{
 nnoremap <buffer> <localleader>bq :call <SID>InsertBlockQuoteNormal()<CR>
 vnoremap <buffer> <localleader>bq :<c-u>call <SID>InsertBlockQuoteVisual()<CR>
+"}}}
+
+" Newline Mapping {{{
+nnoremap <buffer> <localleader>n :call <SID>InsertNewlineNormal()<CR>
+vnoremap <buffer> <localleader>n :<c-u>call <SID>InsertNewlineVisual()<CR>
 "}}}
